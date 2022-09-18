@@ -4,7 +4,9 @@ function onRequest(req, res) {
   console.log("serve: " + req.url);
 
   if (!req.headers.authorization) {
-    return res.status(403);
+    res.writeHead(400, { "Content-Type": "text/html" });
+    res.write("Invalid header");
+    res.end();
   }
 
   const options = {
