@@ -3,6 +3,10 @@ const http = require("http");
 function onRequest(req, res) {
   console.log("serve: " + req.url);
 
+  if (!req.headers.authorization) {
+    return res.status(403);
+  }
+
   const options = {
     hostname: req.headers.authorization.split(":")[0],
     port: req.headers.authorization.split(":")[1] ?? 3000,
