@@ -1,5 +1,8 @@
 const http = require("http");
+const https = require("https");
+const fs = require(`fs`);
 
+// for http
 function onRequest(req, res) {
   console.log("serve: " + req.url);
 
@@ -32,6 +35,13 @@ function onRequest(req, res) {
   });
 }
 
-http.createServer(onRequest).listen(3003);
-
-console.log("Listening on port 3003");
+http.createServer(onRequest).listen(80);
+https
+  .createServer(
+    {
+      key: fs.readFileSync("src/key.pem"),
+      cert: fs.readFileSync("src/cert.pem"),
+    },
+    onRequest
+  )
+  .listen(443);
