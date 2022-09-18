@@ -3,15 +3,15 @@ const http = require("http");
 function onRequest(req, res) {
   console.log("serve: " + req.url);
 
-  if (!req.headers.authorization) {
+  if (!req.headers.host) {
     res.writeHead(400, { "Content-Type": "text/html" });
     res.write("Invalid header");
     res.end();
   }
 
   const options = {
-    hostname: req.headers.authorization.split(":")[0],
-    port: req.headers.authorization.split(":")[1] ?? 3000,
+    hostname: req.headers.host.split(":")[0],
+    port: req.headers.host.split(":")[1] ?? 3000,
     path: req.url,
     method: req.method,
     headers: {
