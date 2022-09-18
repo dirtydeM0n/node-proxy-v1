@@ -7,11 +7,13 @@ function onRequest(req, res) {
   console.log("serve: " + req.url);
 
   if (!req.headers.host) {
+    // 400 bad request as per the assignment's directive
     res.writeHead(400, { "Content-Type": "text/html" });
     res.write("Invalid header");
     res.end();
   }
 
+  // didn't feel like using a dns to resolve the arbitrary endpoint so I custom made this "mega jugaar" in order to use my service's own port
   const options = {
     hostname: req.headers.host.split(":")[0],
     port: req.headers.host.split(":")[1] ?? 3000,
@@ -34,8 +36,11 @@ function onRequest(req, res) {
     end: true,
   });
 }
-
+// listening to public ports
+// openssl certificates were manually generated
 http.createServer(onRequest).listen(80);
+
+// instantiating https
 https
   .createServer(
     {
@@ -45,3 +50,5 @@ https
     onRequest
   )
   .listen(443);
+
+console.log("Proxy server by AHS. Up and running on port 80 and 443");
